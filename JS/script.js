@@ -1,59 +1,44 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Recuperar as tarefas do Local Storage ao carregar a página
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const taskListaContainer = document.querySelector(".app__section-task-list")
 
-    // Função para renderizar a lista de tarefas
-    function renderTasks() {
-        const taskList = document.querySelector('.app__section-task-list');
-        taskList.innerHTML = '';
+let tarefas = [
+    {
+        descricao: 'Tarefa Concluída' ,
+        concluida: true
+    },
 
-        tasks.forEach(function (task, index) {
-            const listItem = document.createElement('li');
-            listItem.textContent = task.description;
-
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Excluir';
-            deleteButton.addEventListener('click', function () {
-                // Remover a tarefa da lista
-                tasks.splice(index, 1);
-                // Atualizar o Local Storage
-                localStorage.setItem('tasks', JSON.stringify(tasks));
-                // Renderizar novamente a lista
-                renderTasks();
-            });
-
-            listItem.appendChild(deleteButton);
-            taskList.appendChild(listItem);
-        });
+    {
+        descricao: 'Tarefa Pendente',
+        concluida: false
     }
+]
 
-    // Adicionar nova tarefa
-    const addButton = document.querySelector('.app__button--add-task');
-    addButton.addEventListener('click', function () {
-        const newTask = prompt('Digite a nova tarefa:');
-        if (newTask) {
-            tasks.push({ description: newTask });
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            renderTasks();
-        }
-    });
+const taskIconSvg = `svg class="app_section-task-icon-status" width="24" viewBox="0 0 24 24"
+ fill="none" xmlns="http://www.w3.org/2000/svg">
+ <circle cx="12" cy="12" r="12" fill="#FFF" />
+ <path
+ d = "M9 16.1719L19.5938 5.57812L21 6.98438L9 18.9844L3.42188 13.4062L4 12L19 16.17192"
+ fill="#01080E" />
+ </svg>`
 
-    // Limpar todas as tarefas
-    const clearAllButton = document.getElementById('btn-remover-todas');
-    clearAllButton.addEventListener('click', function () {
-        tasks = [];
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-        renderTasks();
-    });
+ function createTask(tarefa) {
+    const li = document.createElement('li')
+    li.classList.add('app__section-task-list-item')
 
-    // Limpar tarefas concluídas
-    const clearCompletedButton = document.getElementById('btn-remover-concluidas');
-    clearCompletedButton.addEventListener('click', function () {
-        tasks = tasks.filter(task => !task.completed);
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-        renderTasks();
-    });
+    const svgIcon = document.createElement('svg')
+    svgIcon.innerHTML = taskIconSvg
 
-    // Inicializar a renderização das tarefas
-    renderTasks();
-});
+    const paragraph = document.createElement('p')
+    paragraph.classList.add('app__section-task-list-item-description')
+
+    paragraph.textContent = tarefa.descricao
+
+    li.appendChild(svgIcon)
+    li.appendChild(paragraph)
+
+    return li
+ }
+
+ tarefas.forEach(task => {
+    const taskItem = createTask(task)
+    taskListaContainer.appendChild
+ })

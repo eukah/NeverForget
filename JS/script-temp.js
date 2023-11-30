@@ -1,51 +1,32 @@
-document.addEventListener('DOMContentLoaded', function () {
-    let timerInterval;
-    let timerSeconds = 1500; // 25 minutos em segundos (25 * 60)
+function startTimer(duration, display){
+   
+    var timer = duration, minutes, seconds;
 
-    const timerDisplay = document.getElementById('timer');
-    const startPauseButton = document.getElementById('start-pause');
+    setInterval(function(){
+        
 
-    function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-    }
+        minutes = parseInt(timer /60, 10);
+        seconds = parseInt(timer % 60,10);
 
-    function startTimer() {
-        timerInterval = setInterval(function () {
-            if (timerSeconds > 0) {
-                timerSeconds--;
-                timerDisplay.textContent = formatTime(timerSeconds);
-            } else {
-                clearInterval(timerInterval);
-                timerDisplay.textContent = '00:00';
-            }
-        }, 1000);
-    }
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    function pauseTimer() {
-        clearInterval(timerInterval);
-    }
+        display.textContent = minutes  + ":" + seconds;
 
-    function resetTimer() {
-        clearInterval(timerInterval);
-        timerSeconds = 1500;
-        timerDisplay.textContent = formatTime(timerSeconds);
-    }
-
-    startPauseButton.addEventListener('click', function () {
-        if (startPauseButton.textContent === 'Começar') {
-            startTimer();
-            startPauseButton.textContent = 'Pausar';
-        } else {
-            pauseTimer();
-            startPauseButton.textContent = 'Continuar';
+        if(--timer <0){
+            timer = duration;
         }
-    });
+    }, 1000);
+}
 
-    // Adicione um botão de reiniciar o temporizador
-    const resetButton = document.createElement('button');
-    resetButton.textContent = 'Reiniciar';
-    resetButton.addEventListener('click', resetTimer);
-    document.querySelector('.app__card-primary-button-wrapper').appendChild(resetButton);
-});
+
+window.onload = function() {
+    const start = document.getElementById("start-pause");
+
+    start.addEventListener('click', function() {
+        var duration = 60 * 25; // Para segundos
+        var display = document.querySelector("#timer"); // Onde exibiremos o contador
+
+        startTimer(duration, display); // Inicia a função
+    });
+}
